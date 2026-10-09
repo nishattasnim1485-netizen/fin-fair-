@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="FinFair is a free, student-built tool for exploring education and living costs." />
+  <title>FinFair — Plan with clarity</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="topbar wrap"><a class="brand" href="#home" aria-label="FinFair home"><span class="brand-mark">F</span> FinFair</a><a class="navlink" href="#about">About the project ↗</a></header>
+  <main id="home">
+    <section class="hero wrap"><div class="eyebrow">A STUDENT-BUILT FINANCIAL PLANNING TOOL</div><h1>Big decisions.<br><em>Clearer numbers.</em></h1><p>Explore what university and everyday life might cost, compare two plans, and see how unexpected expenses can affect your budget.</p><a href="#calculator" class="primary-link">Explore your budget <span aria-hidden="true">↘</span></a></section>
+    <section class="calculator wrap" id="calculator" aria-label="Affordability calculator"><div class="section-top"><div><div class="eyebrow">01 / THE SIMULATOR</div><h2>Make your plan.</h2><p>Enter your own estimates. Everything runs in your browser; nothing is sent to a server.</p></div><span class="pill">Illustrative calculator</span></div>
+      <div class="layout"><div class="controls panel">
+        <h3>Your monthly picture</h3>
+        <label for="income">Monthly take-home income <span>USD</span></label><input id="income" type="number" min="0" max="1000000" step="50" value="2400" inputmode="decimal" />
+        <label for="rent">Monthly housing cost <span>USD</span></label><input id="rent" type="number" min="0" max="1000000" step="50" value="900" inputmode="decimal" />
+        <label for="other">Other monthly living costs <span>USD</span></label><input id="other" type="number" min="0" max="1000000" step="50" value="650" inputmode="decimal" />
+        <label for="tuition">Annual out-of-pocket tuition <span>USD</span></label><input id="tuition" type="number" min="0" max="10000000" step="100" value="3600" inputmode="decimal" />
+        <label for="surprise">One-time unexpected cost <span>USD</span></label><input id="surprise" type="number" min="0" max="1000000" step="50" value="400" inputmode="decimal" />
+        <p id="error" class="error" role="alert" hidden>Please enter a valid, non-negative number in every field.</p>
+        <button id="reset" class="text-button" type="button">↺ Reset example values</button>
+      </div>
+      <div class="results panel" aria-live="polite"><div class="eyebrow">YOUR MONTHLY ESTIMATE</div><p class="result-label">Estimated money left</p><div id="remaining" class="number">$550</div><div id="status" class="status">Positive balance</div><div class="bar" aria-label="Proportion of income spent"><div id="barfill"></div></div><div class="split"><span>Estimated monthly expenses</span><strong id="expenses">$1,850</strong></div><div class="split"><span>Expense share of income</span><strong id="share">77%</strong></div><div class="divider"></div><h3>What if something unexpected happens?</h3><p>After the one-time expense, your estimated balance for that month would be:</p><div id="afterShock" class="shock">$150</div><p id="insight" class="insight"></p><p class="fineprint">Annual tuition is divided by 12 for planning only. Actual tuition due dates, loans, taxes, aid, and borrowing costs are not modeled. This is educational, not financial advice.</p></div></div>
+    </section>
+    <section class="compare wrap"><div class="eyebrow">02 / COMPARE OPTIONS</div><h2>What changes if you move?</h2><p>See what happens if your housing cost is different. The rest of your budget stays the same.</p><div class="compare-grid"><div class="panel"><div class="compare-head">Plan A <span>Your current housing estimate</span></div><div id="planA" class="compare-number">$550</div><p>Monthly balance</p></div><div class="panel"><label for="rentB">Plan B housing cost (USD/month)</label><input id="rentB" type="number" min="0" max="1000000" step="50" value="1200" /><div id="planB" class="compare-number">$250</div><p>Monthly balance</p></div></div><div id="comparison" class="comparison-note" aria-live="polite"></div></section>
+    <section id="about" class="about wrap"><div class="eyebrow">03 / WHY FINFAIR?</div><h2>Technology should make important decisions easier.</h2><p>FinFair is an early-stage student project exploring how simple, transparent calculations can help prospective university students understand financial tradeoffs. It is a prototype—not a replacement for official university cost estimates or professional financial advice.</p><p class="fineprint">All figures are user-entered or illustrative. No account, backend, tracking, or financial data collection is used.</p></section>
+  </main><footer class="wrap">FinFair · Student-built prototype · <span id="year"></span></footer>
+</body></html>
