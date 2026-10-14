@@ -1,4 +1,5 @@
 import { monthlyExpenses, monthlyBalance, afterUnexpectedCost, shareOfIncome, validInputs, compareHousing, universityAnnualCost, usdToBdt, validUniversityInputs, projectFourYears, totalProjection, validProjectionRates } from './calculations.mjs';
+import { projectedAnnualBalance } from "./calculations.mjs";
 const $ = id => document.getElementById(id);
 const defaults = {income:2400, rent:900, other:650, tuition:3600, surprise:400, rentB:1200};
 const money = n => `${n < 0 ? '−' : ''}$${Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:0})}`;
