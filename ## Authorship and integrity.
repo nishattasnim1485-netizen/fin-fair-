@@ -127,6 +127,34 @@ Try completing these yourself and save your results in GitHub commits:
 - [ ] Revise the model based on observed needs and limitations.
 - [ ] Publish a short, evidence-based impact report.
 
+## My Development Process and Contributions
+
+FinFair began as an AI-assisted prototype designed to help students understand the costs of university education.
+
+I have been learning how to develop, modify, test, and publish its features using HTML, CSS, JavaScript, and GitHub.
+
+### My Hands-On Contributions
+
+- Added a projected annual balance function using JavaScript with step-by-step guidance.
+- Connected the new calculation to the website's HTML and JavaScript interface.
+- Added an explanation of the assumptions behind the annual projection.
+- Ran automated tests using GitHub Codespaces and confirmed that all 21 tests passed.
+- Tested the updated calculator on the live website.
+- Used GitHub commits to document changes and maintain a development journal.
+
+### What I Learned
+
+Through this process, I learned how JavaScript functions work, how HTML elements connect to JavaScript, and how automated testing helps identify mistakes.
+
+I also learned how to publish website updates and verify that changes work correctly.
+
+### AI Assistance
+
+AI tools helped generate the initial prototype and provided coding guidance, explanations, and debugging support. My hands-on work has focused on understanding the code, making guided modifications, running tests, and verifying the results.
+
+My goal is to become increasingly independent in designing and implementing future features.
+
+
 ## Authorship and integrity
 
 This codebase, including the Version 2 and Version 3 comparison/projection features, was generated with AI assistance as a starter prototype. Review each function, change the product based on your own research, and accurately describe your personal contributions in applications. Do not claim invented users, metrics, or independently authored code.
