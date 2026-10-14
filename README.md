@@ -7,6 +7,7 @@ FinFair is an early-stage, student-built affordability simulator to help prospec
 
 ## Project Portfolio
 [Read My FinFair Project Portfolio](PROJECT_PORTFOLIO.md)
+
 [View My Development Journal](DEVELOPMENT_LOG.md)
 
 ## Features
