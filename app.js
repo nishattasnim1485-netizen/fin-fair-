@@ -13,6 +13,7 @@ function render() {
   if (!valid) return;
   const balance = monthlyBalance(values), expense = monthlyExpenses(values), shock = afterUnexpectedCost(values), share = shareOfIncome(values);
   $('remaining').textContent = money(balance);
+$("annualBalance").textContent = money(projectedAnnualBalance(values));
   $('remaining').classList.toggle('negative',balance<0);
   $('status').textContent = balance < 0 ? 'Estimated deficit' : balance < values.income*.1 ? 'Tight budget' : 'Positive balance';
   $('expenses').textContent = money(expense);
