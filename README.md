@@ -5,6 +5,10 @@ FinFair is an early-stage, student-built affordability simulator to help prospec
 ## Live Website
 [Try FinFair — Plan with Clarity](https://nishattasnim1485-netizen.github.io/fin-fair-/)
 
+## Project Portfolio
+[Read My FinFair Project Portfolio](PROJECT_PORTFOLIO.md)
+[View My Development Journal](DEVELOPMENT_LOG.md)
+
 ## Features
 - Instant monthly income / cost calculator
 - Annual tuition converted into a monthly *planning equivalent*
