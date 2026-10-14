@@ -2,6 +2,9 @@
 
 FinFair is an early-stage, student-built affordability simulator to help prospective university students reason about tuition, housing, living expenses, and unexpected costs. This repository contains a prototype, not a finished financial guidance service.
 
+## Live Website
+[Try FinFair — Plan with Clarity](https://nishattasnim1485-netizen.github.io/fin-fair-/)
+
 ## Features
 - Instant monthly income / cost calculator
 - Annual tuition converted into a monthly *planning equivalent*
@@ -13,6 +16,8 @@ FinFair is an early-stage, student-built affordability simulator to help prospec
 - Four-year university cost predictor with editable annual tuition and living-cost increases
 - Year-by-year estimates, four-year totals, and shared USD/BDT toggle
 - Transparent financial formulas with no external data or API
+- Projected annual balance calculator with transparent assumptions about monthly income and expenses
+
 
 ## Run it locally
 
