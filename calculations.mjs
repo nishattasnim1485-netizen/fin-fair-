@@ -4,6 +4,11 @@ export function monthlyExpenses({ rent, other, tuition }) {
 }
 export function monthlyBalance(values) {
   return values.income - monthlyExpenses(values);
+
+}
+export function projectedAnnualBalance(values) {
+  return monthlyBalance(values) * 12;
+  
 }
 export function afterUnexpectedCost(values) {
   return monthlyBalance(values) - values.surprise;
