@@ -37,3 +37,30 @@ export function validUniversityInputs(optionA, optionB, exchangeRate) {
   return validInputs(optionA) && validInputs(optionB) &&
     Number.isFinite(exchangeRate) && exchangeRate > 0;
 }
+
+
+/** Build a four-year educational COST SCENARIO, not a financial forecast.
+ * Each year, tuition rises by the chosen percentage and combined housing/living
+ * costs rise by their chosen percentage. Annual aid remains unchanged; users
+ * must verify whether their real scholarships renew each year.
+ */
+export function projectFourYears(option, tuitionGrowthPct, livingGrowthPct) {
+  return Array.from({ length: 4 }, (_, index) => {
+    const tuition = option.tuition * (1 + tuitionGrowthPct / 100) ** index;
+    const housing = option.housing * (1 + livingGrowthPct / 100) ** index;
+    const living = option.living * (1 + livingGrowthPct / 100) ** index;
+    const cost = universityAnnualCost({ tuition, housing, living, aid: option.aid });
+    return { year: index + 1, tuition, housing, living, aid: option.aid, cost };
+  });
+}
+
+/** Total cost across all years, without rounding each year's intermediate math. */
+export function totalProjection(years) {
+  return years.reduce((sum, item) => sum + item.cost, 0);
+}
+
+/** Reject negative, missing, nonfinite, or unusually extreme growth assumptions. */
+export function validProjectionRates(tuitionGrowthPct, livingGrowthPct) {
+  return [tuitionGrowthPct, livingGrowthPct]
+    .every(n => Number.isFinite(n) && n >= 0 && n <= 25);
+}

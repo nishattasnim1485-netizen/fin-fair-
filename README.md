@@ -10,6 +10,8 @@ FinFair is an early-stage, student-built affordability simulator to help prospec
 - Compare TWO universities using annual tuition & fees, annual scholarships/grants, monthly housing, and monthly living costs
 - Toggle comparison totals between USD and BDT using an editable (NOT live) exchange rate
 - View a side-by-side estimated annual cost, 12-month equivalent, and simple visual comparison
+- Four-year university cost predictor with editable annual tuition and living-cost increases
+- Year-by-year estimates, four-year totals, and shared USD/BDT toggle
 - Transparent financial formulas with no external data or API
 
 ## Run it locally
@@ -62,6 +64,39 @@ The default **120 BDT per USD is an illustrative placeholder, not a current or l
 - University B is cheaper by **$1,400 per year** with these *fictional* inputs.
 - With illustrative rate of 120 BDT/USD: A = ৳4,560,000 and B = ৳4,392,000.
 
+## What changed in Version 3 — four-year cost scenarios
+
+The new `#four-year` section in `index.html` uses the **same two university inputs** from Version 2. Adjust the annual tuition and living-cost growth percentages. Both universities use the same percentages so you can compare scenarios consistently.
+
+For each university, the cost in year `n` is:
+
+```
+Year n cost (USD) = max(0,
+  tuition_year1 × (1 + tuition_growth_rate)^(n - 1)
+  + 12 × (housing_year1 + living_year1) × (1 + living_growth_rate)^(n - 1)
+  - annual_scholarship_year1
+)
+Four-year total = sum(costs for years 1, 2, 3, and 4)
+```
+
+- Year 1 has no increase and matches Version 2 exactly.
+- Growth percentages apply once each new year and are **illustrative assumptions, not official tuition projections**.
+- Scholarships/grants are assumed to stay the same dollar amount each year; actual aid renewal can vary.
+- All four years assume 12 months of living expenses. Financial aid eligibility, travel, insurance, loan interest, taxes, academic program changes, exchange fees, and future exchange rates are omitted.
+- The same user-entered USD/BDT conversion rate is applied to **displayed results only**.
+- Rounding happens on display; internal calculations retain precision, so adding four displayed whole-dollar rows could differ slightly from the total.
+
+**Example at 3% annual tuition growth and 2% annual living-cost growth:**
+
+| University | Year 1 (USD) | Four-year total (USD) |
+| --- | ---: | ---: |
+| A | $38,000 | $159,698 |
+| B | $36,600 | $156,372 |
+
+University B has the lower projected four-year cost by about **$3,326** under these hypothetical assumptions. This result can differ from a simple 4× Year 1 comparison.
+
+See `V3_LEARNING_GUIDE.md` for a beginner walkthrough and test checklist.
+
 ## Model and assumptions
 
 Monthly expenses = housing + other monthly living expenses + annual out-of-pocket tuition / 12.
@@ -89,7 +124,7 @@ Try completing these yourself and save your results in GitHub commits:
 
 ## Authorship and integrity
 
-This codebase, including the Version 2 comparison feature, was generated with AI assistance as a starter prototype. Review each function, change the product based on your own research, and accurately describe your personal contributions in applications. Do not claim invented users, metrics, or independently authored code.
+This codebase, including the Version 2 and Version 3 comparison/projection features, was generated with AI assistance as a starter prototype. Review each function, change the product based on your own research, and accurately describe your personal contributions in applications. Do not claim invented users, metrics, or independently authored code.
 
 ## Privacy
 

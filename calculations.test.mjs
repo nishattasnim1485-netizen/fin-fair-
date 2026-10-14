@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {monthlyExpenses,monthlyBalance,afterUnexpectedCost,shareOfIncome,validInputs,compareHousing,universityAnnualCost,usdToBdt,validUniversityInputs} from './calculations.mjs';
+import {monthlyExpenses,monthlyBalance,afterUnexpectedCost,shareOfIncome,validInputs,compareHousing,universityAnnualCost,usdToBdt,validUniversityInputs,projectFourYears,totalProjection,validProjectionRates} from './calculations.mjs';
 const x = {income:2400,rent:900,other:650,tuition:3600,surprise:400};
 test('annual tuition spread over 12 months',()=>assert.equal(monthlyExpenses(x),1850));
 test('monthly balance',()=>assert.equal(monthlyBalance(x),550));
@@ -22,4 +22,44 @@ test('validate both universities and positive exchange rate',()=>{
   assert.equal(validUniversityInputs(optionA,optionB,0),false);
   assert.equal(validUniversityInputs({...optionA,tuition:-1},optionB,120),false);
   assert.equal(validUniversityInputs(optionA,{...optionB,living:NaN},120),false);
+});
+
+
+test('projection begins with existing Year 1 cost for both universities', () => {
+  assert.equal(projectFourYears(optionA, 3, 2)[0].cost, 38000);
+  assert.equal(projectFourYears(optionB, 3, 2)[0].cost, 36600);
+});
+test('3% tuition growth and 2% living growth apply separately', () => {
+  const rows = projectFourYears(optionA, 3, 2);
+  assert.equal(rows[1].tuition, 30900);
+  assert.equal(rows[1].housing, 1020);
+  assert.equal(rows[1].living, 510);
+  assert.equal(rows[1].aid, 10000);
+  assert.equal(rows[1].cost, 39260);
+});
+test('no annual increases means four equal yearly costs', () => {
+  const years = projectFourYears(optionA, 0, 0);
+  assert.deepEqual(years.map(row=>row.cost), [38000,38000,38000,38000]);
+  assert.equal(totalProjection(years), 152000);
+});
+test('four-year total matches separately compounded yearly costs', () => {
+  assert.equal(Math.round(totalProjection(projectFourYears(optionA,3,2))),159698);
+  assert.equal(Math.round(totalProjection(projectFourYears(optionB,3,2))),156372);
+});
+test('very large scholarship never makes any projected year negative', () => {
+  const years = projectFourYears({tuition:1000, housing:0, living:0, aid:99999},3,2);
+  assert.deepEqual(years.map(y=>y.cost),[0,0,0,0]);
+});
+test('growth rates must be finite and between 0 and 25%', () => {
+  assert.equal(validProjectionRates(3,2),true);
+  assert.equal(validProjectionRates(0,25),true);
+  assert.equal(validProjectionRates(-1,0),false);
+  assert.equal(validProjectionRates(0,26),false);
+  assert.equal(validProjectionRates(NaN,2),false);
+  assert.equal(validProjectionRates(Infinity,2),false);
+});
+test('projected cost converts to BDT without changing USD baseline', () => {
+  const usd=totalProjection(projectFourYears(optionA,0,0));
+  assert.equal(usdToBdt(usd,120),18240000);
+  assert.equal(usd,152000);
 });

@@ -28,3 +28,29 @@
 .result-note { font-weight:700; margin-top:24px; padding:16px; background:#f1f8f3; border-radius:12px; line-height:1.6; }
 #uniError { margin:16px 4px; }
 @media(max-width:760px) { .university-grid,.university-totals,.currency-tools { grid-template-columns:1fr; } .currency-note { grid-column:auto; } .top-links { gap:12px; } .top-links .navlink { font-size:12px; } .uni-bar-row { grid-template-columns:95px minmax(0,1fr); } }
+
+
+/* Version 3: four-year outlook. Uses the same panels and type styles as V2. */
+.projection { padding-top:25px; padding-bottom:100px; }
+.projection-settings { display:grid; grid-template-columns:1fr 1fr; gap:16px 24px; margin-bottom:20px; }
+.projection-settings label { display:flex; flex-wrap:wrap; justify-content:space-between; gap:7px; font-size:13px; font-weight:700; }
+.projection-settings label span { font-size:12px; color:#8b9b94; font-weight:400; }
+.projection-settings .text-button { margin-top:0; grid-column:1/-1; justify-self:start; padding:6px 0; }
+.projection-results h3 { margin:35px 0 16px; font-size:19px; }
+.projection-totals { margin-bottom:8px; }
+.table-scroll { width:100%; overflow-x:auto; border:1px solid #e1eae3; border-radius:15px; }
+.projection-table { width:100%; border-collapse:collapse; min-width:440px; text-align:left; }
+.projection-table th, .projection-table td { padding:16px; border-bottom:1px solid #e8efe9; font-size:14px; }
+.projection-table th { background:#f3f8f4; font-size:12px; color:#3a6250; }
+.projection-table td { font-variant-numeric:tabular-nums; }
+.projection-table tbody tr:last-child td { border-bottom:none; }
+.projection-table td:first-child { color:#547265; font-weight:700; }
+@media(max-width:760px) {
+  .projection-settings { grid-template-columns:1fr; }
+  .projection .uni-amount { font-size:clamp(26px,7vw,38px); }
+  .top-links a[href="#four-year"] { display:none; }
+}
+@media(max-width:760px) {
+  .projection-table { min-width:0; }
+  .projection-table th, .projection-table td { padding:11px 7px; font-size:12px; overflow-wrap:anywhere; }
+}

@@ -9,9 +9,9 @@
   <script type="module" src="app.js"></script>
 </head>
 <body>
-  <header class="topbar wrap"><a class="brand" href="#home" aria-label="FinFair home"><span class="brand-mark">F</span> FinFair</a><nav class="top-links" aria-label="Main navigation"><a class="navlink" href="#universities">Compare universities</a><a class="navlink" href="#about">About ↗</a></nav></header>
+  <header class="topbar wrap"><a class="brand" href="#home" aria-label="FinFair home"><span class="brand-mark">F</span> FinFair</a><nav class="top-links" aria-label="Main navigation"><a class="navlink" href="#universities">Compare universities</a><a class="navlink" href="#four-year">4-year forecast</a><a class="navlink" href="#about">About ↗</a></nav></header>
   <main id="home">
-    <section class="hero wrap"><div class="eyebrow">A STUDENT-BUILT FINANCIAL PLANNING TOOL</div><h1>Big decisions.<br><em>Clearer numbers.</em></h1><p>Explore what university and everyday life might cost, compare two campuses side by side, and see how expenses and exchange rates can shape your decisions.</p><a href="#calculator" class="primary-link">Explore your budget <span aria-hidden="true">↘</span></a></section>
+    <section class="hero wrap"><div class="eyebrow">A STUDENT-BUILT FINANCIAL PLANNING TOOL</div><h1>Big decisions.<br><em>Clearer numbers.</em></h1><p>Explore what university and everyday life might cost, compare two campuses side by side, and see how expenses, exchange rates, and four-year changes can shape your decisions.</p><a href="#calculator" class="primary-link">Explore your budget <span aria-hidden="true">↘</span></a></section>
     <section class="calculator wrap" id="calculator" aria-label="Affordability calculator"><div class="section-top"><div><div class="eyebrow">01 / THE SIMULATOR</div><h2>Make your plan.</h2><p>Enter your own estimates. Everything runs in your browser; nothing is sent to a server.</p></div><span class="pill">Illustrative calculator</span></div>
       <div class="layout"><div class="controls panel">
         <h3>Your monthly picture</h3>
@@ -83,6 +83,45 @@
       </div>
       <button id="resetUniversities" class="text-button" type="button">↺ Reset example university costs</button>
     </section>
-    <section id="about" class="about wrap"><div class="eyebrow">04 / WHY FINFAIR?</div><h2>Technology should make important decisions easier.</h2><p>FinFair is an early-stage student project exploring how simple, transparent calculations can help prospective university students understand financial tradeoffs. It is a prototype—not a replacement for official university cost estimates or professional financial advice.</p><p class="fineprint">All figures are user-entered or illustrative. No account, backend, tracking, or financial data collection is used.</p></section>
+    <section class="projection wrap" id="four-year" aria-label="Four-year university cost projection">
+      <div class="section-top">
+        <div>
+          <div class="eyebrow">04 / THE FOUR-YEAR PICTURE</div>
+          <h2>See the bigger picture.</h2>
+          <p>Compare four years of estimated costs using the university details you entered above. Adjust annual tuition and living-cost increases to explore different scenarios.</p>
+        </div>
+        <span class="pill">New · Version 3</span>
+      </div>
+      <div class="panel projection-settings">
+        <div>
+          <label for="tuitionGrowth">Tuition &amp; fees increase each year <span>% per year</span></label>
+          <input id="tuitionGrowth" type="number" min="0" max="25" step="0.5" value="3" inputmode="decimal" />
+        </div>
+        <div>
+          <label for="livingGrowth">Housing &amp; living-cost increase each year <span>% per year</span></label>
+          <input id="livingGrowth" type="number" min="0" max="25" step="0.5" value="2" inputmode="decimal" />
+        </div>
+        <p class="currency-note">Example growth assumptions—not predicted inflation or university price increases. Scholarships are held <strong>constant in USD each year</strong>; check their renewal conditions. Year 1 matches the university comparison above. Results use the same USD/BDT display choice and exchange rate.</p>
+        <button id="resetGrowth" type="button" class="text-button">↺ Reset growth assumptions</button>
+      </div>
+      <p id="projectionError" class="error" role="alert" hidden>Enter valid tuition and living-cost growth rates between 0% and 25%, and valid university inputs above.</p>
+      <div id="projectionResults" class="panel projection-results" aria-live="polite">
+        <div class="eyebrow">ESTIMATED FOUR-YEAR OUT-OF-POCKET COST</div>
+        <div class="university-totals projection-totals">
+          <div><p id="projectionAName" class="result-label">University A</p><div id="projectionATotal" class="uni-amount">$159,698</div></div>
+          <div><p id="projectionBName" class="result-label">University B</p><div id="projectionBTotal" class="uni-amount">$156,372</div></div>
+        </div>
+        <p id="projectionDifference" class="comparison-note result-note">University B has a lower estimated four-year cost by $3,326.</p>
+        <h3>Year-by-year breakdown</h3>
+        <div class="table-scroll">
+          <table class="projection-table">
+            <thead><tr><th scope="col">Year</th><th id="projectionTableA" scope="col">University A</th><th id="projectionTableB" scope="col">University B</th></tr></thead>
+            <tbody id="projectionTableBody"></tbody>
+          </table>
+        </div>
+        <p class="fineprint">Year n: max(0, tuition × (1 + tuition growth)^(n−1) + 12 × (housing + living) × (1 + living growth)^(n−1) − annual scholarship). Total is the sum of the four years. Assumes 12 months of living costs each year, constant grants, and the same chosen exchange rate for every year. Excludes travel, insurance, loans, taxes, and exchange-rate changes. It is a scenario, not a quote or guarantee.</p>
+      </div>
+    </section>
+    <section id="about" class="about wrap"><div class="eyebrow">05 / WHY FINFAIR?</div><h2>Technology should make important decisions easier.</h2><p>FinFair is an early-stage student project exploring how simple, transparent calculations can help prospective university students understand financial tradeoffs. It is a prototype—not a replacement for official university cost estimates or professional financial advice.</p><p class="fineprint">All figures are user-entered or illustrative. No account, backend, tracking, or financial data collection is used.</p></section>
   </main><footer class="wrap">FinFair · Student-built prototype · <span id="year"></span></footer>
 </body></html>
