@@ -9,9 +9,9 @@
   <script type="module" src="app.js"></script>
 </head>
 <body>
-  <header class="topbar wrap"><a class="brand" href="#home" aria-label="FinFair home"><span class="brand-mark">F</span> FinFair</a><a class="navlink" href="#about">About the project ↗</a></header>
+  <header class="topbar wrap"><a class="brand" href="#home" aria-label="FinFair home"><span class="brand-mark">F</span> FinFair</a><nav class="top-links" aria-label="Main navigation"><a class="navlink" href="#universities">Compare universities</a><a class="navlink" href="#about">About ↗</a></nav></header>
   <main id="home">
-    <section class="hero wrap"><div class="eyebrow">A STUDENT-BUILT FINANCIAL PLANNING TOOL</div><h1>Big decisions.<br><em>Clearer numbers.</em></h1><p>Explore what university and everyday life might cost, compare two plans, and see how unexpected expenses can affect your budget.</p><a href="#calculator" class="primary-link">Explore your budget <span aria-hidden="true">↘</span></a></section>
+    <section class="hero wrap"><div class="eyebrow">A STUDENT-BUILT FINANCIAL PLANNING TOOL</div><h1>Big decisions.<br><em>Clearer numbers.</em></h1><p>Explore what university and everyday life might cost, compare two campuses side by side, and see how expenses and exchange rates can shape your decisions.</p><a href="#calculator" class="primary-link">Explore your budget <span aria-hidden="true">↘</span></a></section>
     <section class="calculator wrap" id="calculator" aria-label="Affordability calculator"><div class="section-top"><div><div class="eyebrow">01 / THE SIMULATOR</div><h2>Make your plan.</h2><p>Enter your own estimates. Everything runs in your browser; nothing is sent to a server.</p></div><span class="pill">Illustrative calculator</span></div>
       <div class="layout"><div class="controls panel">
         <h3>Your monthly picture</h3>
@@ -26,6 +26,63 @@
       <div class="results panel" aria-live="polite"><div class="eyebrow">YOUR MONTHLY ESTIMATE</div><p class="result-label">Estimated money left</p><div id="remaining" class="number">$550</div><div id="status" class="status">Positive balance</div><div class="bar" aria-label="Proportion of income spent"><div id="barfill"></div></div><div class="split"><span>Estimated monthly expenses</span><strong id="expenses">$1,850</strong></div><div class="split"><span>Expense share of income</span><strong id="share">77%</strong></div><div class="divider"></div><h3>What if something unexpected happens?</h3><p>After the one-time expense, your estimated balance for that month would be:</p><div id="afterShock" class="shock">$150</div><p id="insight" class="insight"></p><p class="fineprint">Annual tuition is divided by 12 for planning only. Actual tuition due dates, loans, taxes, aid, and borrowing costs are not modeled. This is educational, not financial advice.</p></div></div>
     </section>
     <section class="compare wrap"><div class="eyebrow">02 / COMPARE OPTIONS</div><h2>What changes if you move?</h2><p>See what happens if your housing cost is different. The rest of your budget stays the same.</p><div class="compare-grid"><div class="panel"><div class="compare-head">Plan A <span>Your current housing estimate</span></div><div id="planA" class="compare-number">$550</div><p>Monthly balance</p></div><div class="panel"><label for="rentB">Plan B housing cost (USD/month)</label><input id="rentB" type="number" min="0" max="1000000" step="50" value="1200" /><div id="planB" class="compare-number">$250</div><p>Monthly balance</p></div></div><div id="comparison" class="comparison-note" aria-live="polite"></div></section>
-    <section id="about" class="about wrap"><div class="eyebrow">03 / WHY FINFAIR?</div><h2>Technology should make important decisions easier.</h2><p>FinFair is an early-stage student project exploring how simple, transparent calculations can help prospective university students understand financial tradeoffs. It is a prototype—not a replacement for official university cost estimates or professional financial advice.</p><p class="fineprint">All figures are user-entered or illustrative. No account, backend, tracking, or financial data collection is used.</p></section>
+    <section class="universities wrap" id="universities" aria-label="University cost comparison">
+      <div class="section-top">
+        <div>
+          <div class="eyebrow">03 / UNIVERSITY COST COMPARISON</div>
+          <h2>Compare your future.</h2>
+          <p>Enter the costs for two universities. See estimated yearly totals side by side—and view them in US dollars or Bangladeshi taka.</p>
+        </div>
+        <span class="pill">New feature · Version 2</span>
+      </div>
+      <div class="currency-tools panel">
+        <div class="currency-control">
+          <label for="displayCurrency">Show comparison totals in</label>
+          <select id="displayCurrency" aria-label="Currency used for displayed university costs">
+            <option value="USD" selected>USD — US dollars ($)</option>
+            <option value="BDT">BDT — Bangladeshi taka (৳)</option>
+          </select>
+        </div>
+        <div class="currency-control">
+          <label for="bdtRate">Exchange rate: BDT for 1 USD</label>
+          <input id="bdtRate" type="number" min="0.01" max="10000" step="0.01" value="120" inputmode="decimal" />
+        </div>
+        <p class="currency-note">This is an editable <strong>example rate, not a live exchange rate</strong>. The inputs below always stay in USD; only the displayed results are converted. Check a reliable current rate before making decisions.</p>
+      </div>
+      <div class="university-grid">
+        <div class="panel university-card">
+          <div class="uni-tag">OPTION A</div>
+          <label for="uniAName">University name</label><input id="uniAName" type="text" maxlength="60" value="University A" autocomplete="off" />
+          <label for="uniATuition">Annual tuition & fees <span>USD/year</span></label><input id="uniATuition" type="number" min="0" max="1000000" step="100" value="30000" inputmode="decimal" />
+          <label for="uniAAid">Annual scholarships / grants <span>USD/year</span></label><input id="uniAAid" type="number" min="0" max="1000000" step="100" value="10000" inputmode="decimal" />
+          <label for="uniAHousing">Housing <span>USD/month</span></label><input id="uniAHousing" type="number" min="0" max="1000000" step="50" value="1000" inputmode="decimal" />
+          <label for="uniALiving">Food, transport & other living costs <span>USD/month</span></label><input id="uniALiving" type="number" min="0" max="1000000" step="50" value="500" inputmode="decimal" />
+        </div>
+        <div class="panel university-card">
+          <div class="uni-tag">OPTION B</div>
+          <label for="uniBName">University name</label><input id="uniBName" type="text" maxlength="60" value="University B" autocomplete="off" />
+          <label for="uniBTuition">Annual tuition & fees <span>USD/year</span></label><input id="uniBTuition" type="number" min="0" max="1000000" step="100" value="40000" inputmode="decimal" />
+          <label for="uniBAid">Annual scholarships / grants <span>USD/year</span></label><input id="uniBAid" type="number" min="0" max="1000000" step="100" value="25000" inputmode="decimal" />
+          <label for="uniBHousing">Housing <span>USD/month</span></label><input id="uniBHousing" type="number" min="0" max="1000000" step="50" value="1200" inputmode="decimal" />
+          <label for="uniBLiving">Food, transport & other living costs <span>USD/month</span></label><input id="uniBLiving" type="number" min="0" max="1000000" step="50" value="600" inputmode="decimal" />
+        </div>
+      </div>
+      <div id="uniError" class="error" role="alert" hidden>Please enter valid, non-negative amounts for both universities and an exchange rate greater than zero.</div>
+      <div class="university-results panel" id="universityResults" aria-live="polite">
+        <div class="eyebrow">ESTIMATED ANNUAL OUT-OF-POCKET COST</div>
+        <div class="university-totals">
+          <div><p id="uniAResultName" class="result-label">University A</p><div class="uni-amount" id="uniATotal">$38,000</div><p class="uni-sub">Monthly equivalent: <strong id="uniAMonth">$3,167</strong></p></div>
+          <div><p id="uniBResultName" class="result-label">University B</p><div class="uni-amount" id="uniBTotal">$36,600</div><p class="uni-sub">Monthly equivalent: <strong id="uniBMonth">$3,050</strong></p></div>
+        </div>
+        <div class="uni-bars" aria-label="Relative annual university costs">
+          <div class="uni-bar-row"><span id="barAName">University A</span><div class="uni-bar-track"><div id="uniBarA" class="uni-bar-fill"></div></div></div>
+          <div class="uni-bar-row"><span id="barBName">University B</span><div class="uni-bar-track"><div id="uniBarB" class="uni-bar-fill second"></div></div></div>
+        </div>
+        <p class="comparison-note result-note" id="uniDifference">University B is less expensive by $1,400 per year in this example.</p>
+        <p class="fineprint">Formula: annual tuition and fees + 12 × (monthly housing + monthly living expenses) − annual aid, with a floor of zero. Aid is treated as a simple reduction, not an official eligibility calculation. This excludes travel, insurance, loan interest, inflation, and exchange fees. All figures are illustrative until you enter your own research.</p>
+      </div>
+      <button id="resetUniversities" class="text-button" type="button">↺ Reset example university costs</button>
+    </section>
+    <section id="about" class="about wrap"><div class="eyebrow">04 / WHY FINFAIR?</div><h2>Technology should make important decisions easier.</h2><p>FinFair is an early-stage student project exploring how simple, transparent calculations can help prospective university students understand financial tradeoffs. It is a prototype—not a replacement for official university cost estimates or professional financial advice.</p><p class="fineprint">All figures are user-entered or illustrative. No account, backend, tracking, or financial data collection is used.</p></section>
   </main><footer class="wrap">FinFair · Student-built prototype · <span id="year"></span></footer>
 </body></html>

@@ -18,3 +18,22 @@ export function validInputs(values) {
 export function compareHousing(values, alternativeRent) {
   return monthlyBalance({ ...values, rent: alternativeRent }) - monthlyBalance(values);
 }
+
+/** Annual net cost of studying at one university, in USD.
+ * This is a simplified estimate; scholarships are modeled as annual deductions.
+ * We floor the result at $0 to avoid showing a misleading negative tuition bill.
+ */
+export function universityAnnualCost({ tuition, aid, housing, living }) {
+  return Math.max(0, tuition + 12 * (housing + living) - aid);
+}
+
+/** A conversion of a USD cost into BDT at a user-entered rate (BDT per USD). */
+export function usdToBdt(usd, bdtPerUsd) {
+  return usd * bdtPerUsd;
+}
+
+/** Checks dollar amounts and ensures our user-entered exchange rate is positive. */
+export function validUniversityInputs(optionA, optionB, exchangeRate) {
+  return validInputs(optionA) && validInputs(optionB) &&
+    Number.isFinite(exchangeRate) && exchangeRate > 0;
+}

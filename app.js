@@ -1,4 +1,4 @@
-import { monthlyExpenses, monthlyBalance, afterUnexpectedCost, shareOfIncome, validInputs, compareHousing } from './calculations.mjs';
+import { monthlyExpenses, monthlyBalance, afterUnexpectedCost, shareOfIncome, validInputs, compareHousing, universityAnnualCost, usdToBdt, validUniversityInputs } from './calculations.mjs';
 const $ = id => document.getElementById(id);
 const defaults = {income:2400, rent:900, other:650, tuition:3600, surprise:400, rentB:1200};
 const money = n => `${n < 0 ? '−' : ''}$${Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:0})}`;
@@ -31,3 +31,74 @@ for (const id of Object.keys(defaults)) $(id).addEventListener('input',render);
 $('reset').addEventListener('click',()=>{for(const [id,value] of Object.entries(defaults)) $(id).value=value;render();});
 $('year').textContent = new Date().getFullYear();
 render();
+
+
+// ----- University cost comparison (Version 2) -----
+// These are example numbers, not prices from real universities.
+const universityDefaults = {
+  uniAName:'University A', uniATuition:30000, uniAAid:10000, uniAHousing:1000, uniALiving:500,
+  uniBName:'University B', uniBTuition:40000, uniBAid:25000, uniBHousing:1200, uniBLiving:600,
+  displayCurrency:'USD', bdtRate:120
+};
+const numericUniversityFields = [
+  'uniATuition','uniAAid','uniAHousing','uniALiving',
+  'uniBTuition','uniBAid','uniBHousing','uniBLiving'
+];
+
+function readUniversity(prefix) {
+  // Input values are strings in HTML. Number(...) turns them into numeric values.
+  return {
+    tuition:Number($(prefix+'Tuition').value),
+    aid:Number($(prefix+'Aid').value),
+    housing:Number($(prefix+'Housing').value),
+    living:Number($(prefix+'Living').value)
+  };
+}
+
+function renderUniversities() {
+  const a = readUniversity('uniA');
+  const b = readUniversity('uniB');
+  const rate = Number($('bdtRate').value);
+  // Empty inputs would normally be converted by Number('') into 0; catch them.
+  const nonEmpty = numericUniversityFields.every(id => $(id).value.trim() !== '') && $('bdtRate').value.trim() !== '';
+  const valid = nonEmpty && validUniversityInputs(a,b,rate);
+  $('uniError').hidden = valid;
+  $('universityResults').classList.toggle('invalid', !valid);
+  if (!valid) return;
+
+  const aUsd = universityAnnualCost(a);
+  const bUsd = universityAnnualCost(b);
+  const showBdt = $('displayCurrency').value === 'BDT';
+  const format = usd => showBdt
+    ? `৳${Math.round(usdToBdt(usd,rate)).toLocaleString('en-US')}`
+    : `$${Math.round(usd).toLocaleString('en-US')}`;
+
+  const aName = $('uniAName').value.trim() || 'University A';
+  const bName = $('uniBName').value.trim() || 'University B';
+  $('uniAResultName').textContent = aName;
+  $('uniBResultName').textContent = bName;
+  $('barAName').textContent = aName;
+  $('barBName').textContent = bName;
+  $('uniATotal').textContent = format(aUsd);
+  $('uniBTotal').textContent = format(bUsd);
+  $('uniAMonth').textContent = format(aUsd / 12);
+  $('uniBMonth').textContent = format(bUsd / 12);
+
+  const scale = Math.max(aUsd,bUsd,1); // prevents dividing by zero
+  $('uniBarA').style.width = `${aUsd/scale*100}%`;
+  $('uniBarB').style.width = `${bUsd/scale*100}%`;
+  const difference = Math.abs(aUsd-bUsd);
+  $('uniDifference').textContent = difference < 0.005
+    ? 'Both options have the same estimated annual cost based on your entries.'
+    : `${aUsd < bUsd ? aName : bName} has a lower estimated annual cost by ${format(difference)}.`;
+}
+
+for (const id of [...numericUniversityFields,'uniAName','uniBName','bdtRate']) {
+  $(id).addEventListener('input',renderUniversities);
+}
+$('displayCurrency').addEventListener('change',renderUniversities);
+$('resetUniversities').addEventListener('click', () => {
+  for (const [id,value] of Object.entries(universityDefaults)) $(id).value = value;
+  renderUniversities();
+});
+renderUniversities();
