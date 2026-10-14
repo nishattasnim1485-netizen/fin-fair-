@@ -67,3 +67,27 @@ The annual projection assumes that income and expenses remain unchanged for 12 m
 ### Next Goal
 
 Continue developing my JavaScript skills, improve the clarity of FinFair's financial estimates, and learn how to create more features with greater independence.
+## Manual Functionality Testing — October 2026
+
+I tested FinFair using two fictional student financial scenarios to verify how the calculator handles positive and negative budgets.
+
+### Test 1: Positive Budget
+- Monthly income: $2,600
+- Monthly expenses: $2,100
+- Expected monthly balance: $500
+- Expected annual balance: $6,000
+- Unexpected expense: $500
+- **Result: Passed**
+
+### Test 2: Budget Deficit
+- Monthly income: $1,500
+- Monthly expenses: $2,100
+- Expected monthly balance: −$600
+- Expected annual balance: −$7,200
+- Unexpected expense: $500
+- **Result: Passed**
+
+### What I Learned
+These tests helped me understand the importance of checking different financial scenarios, including negative values. Both scenarios produced the expected results during manual testing.
+
+These were independent functionality tests using fictional data, not usability tests conducted with external participants.
