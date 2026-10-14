@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {monthlyExpenses,monthlyBalance,afterUnexpectedCost,shareOfIncome,validInputs,compareHousing,universityAnnualCost,usdToBdt,validUniversityInputs,projectFourYears,totalProjection,validProjectionRates} from './calculations.mjs';
+import { projectedAnnualBalance } from "./calculations.mjs";
 const x = {income:2400,rent:900,other:650,tuition:3600,surprise:400};
 test('annual tuition spread over 12 months',()=>assert.equal(monthlyExpenses(x),1850));
 test('monthly balance',()=>assert.equal(monthlyBalance(x),550));
@@ -62,4 +63,13 @@ test('projected cost converts to BDT without changing USD baseline', () => {
   const usd=totalProjection(projectFourYears(optionA,0,0));
   assert.equal(usdToBdt(usd,120),18240000);
   assert.equal(usd,152000);
+});
+test("projected annual balance", () => {
+  const values = {
+    income: 2400,
+    rent: 900,
+    other: 650,
+    tuition: 3600
+  };
+  assert.equal(projectedAnnualBalance(values), 6600);
 });
