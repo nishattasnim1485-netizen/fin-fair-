@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {monthlyExpenses,monthlyBalance,afterUnexpectedCost,shareOfIncome,validInputs,compareHousing,universityAnnualCost,usdToBdt,validUniversityInputs,projectFourYears,totalProjection,validProjectionRates} from './calculations.mjs';
+import {monthlyExpenses,monthlyBalance,afterUnexpectedCost,shareOfIncome,validInputs,compareHousing,universityAnnualCost,usdToBdt,convertCurrency,exampleExchangeRate,validUniversityInputs,projectFourYears,totalProjection,validProjectionRates} from './calculations.mjs';
 import { projectedAnnualBalance } from "./calculations.mjs";
 const x = {income:2400,rent:900,other:650,tuition:3600,surprise:400};
 test('annual tuition spread over 12 months',()=>assert.equal(monthlyExpenses(x),1850));
@@ -72,4 +72,25 @@ test("projected annual balance", () => {
     tuition: 3600
   };
   assert.equal(projectedAnnualBalance(values), 6600);
+});
+
+test('illustrative USD to BDT pair rate', () => assert.equal(exampleExchangeRate('USD','BDT'),120));
+test('GBP EUR CAD and AUD examples convert into BDT', () => {
+  for (const [code,rate] of [['GBP',160],['EUR',140],['CAD',90],['AUD',80]])
+    assert.equal(convertCurrency(100,exampleExchangeRate(code,'BDT')),100*rate);
+});
+test('EUR to AUD comparison uses a common illustrative reference', () => {
+  assert.equal(exampleExchangeRate('EUR','AUD'),1.75);
+});
+test('reverse conversion BDT to USD is available', () => {
+  assert.ok(Math.abs(exampleExchangeRate('BDT','USD') - 1/120) < 0.000001);
+});
+test('same currency uses a factor of one and unknown currencies are rejected', () => {
+  assert.equal(exampleExchangeRate('GBP','GBP'),1);
+  assert.equal(Number.isNaN(exampleExchangeRate('XYZ','USD')),true);
+});
+test('user-entered exchange rate overrides examples without changing original cost', () => {
+  const cost = universityAnnualCost(optionA);
+  assert.equal(convertCurrency(cost,152),5776000);
+  assert.equal(cost,38000);
 });
