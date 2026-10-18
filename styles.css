@@ -54,3 +54,49 @@
   .projection-table { min-width:0; }
   .projection-table th, .projection-table td { padding:11px 7px; font-size:12px; overflow-wrap:anywhere; }
 }
+
+/* FinFair Project Showcase */
+
+#finfair-impact,
+#finfair-research,
+#finfair-development,
+#finfair-impact-goals {
+  background: #f4f9f5 !important;
+  border: 1px solid #d9e9dc;
+  border-left: 5px solid #4f9273;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(30, 70, 50, 0.06);
+  transition: transform 0.2s ease;
+}
+
+#finfair-impact h2,
+#finfair-research h2,
+#finfair-development h2,
+#finfair-impact-goals h2 {
+  color: #245940;
+  font-weight: 750;
+}
+
+/* Development Journey Timeline */
+
+#finfair-development h3 {
+  color: #34795b;
+  border-left: 3px solid #77b894;
+  padding-left: 15px;
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+
+#finfair-development h3 + p {
+  padding-left: 18px;
+}
+
+@media (max-width: 600px) {
+  #finfair-impact,
+  #finfair-research,
+  #finfair-development,
+  #finfair-impact-goals {
+    padding: 25px 18px !important;
+  }
+}
+
