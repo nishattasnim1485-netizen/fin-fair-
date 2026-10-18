@@ -37,7 +37,29 @@ export function usdToBdt(usd, bdtPerUsd) {
   return usd * bdtPerUsd;
 }
 
-/** Checks dollar amounts and ensures our user-entered exchange rate is positive. */
+/** Explicitly illustrative BDT values per unit, NOT live exchange rates.
+ * Every currency pair is derived from one shared example reference, so
+ * a user may replace the displayed pair rate with a current rate.
+ */
+export const exampleBdtPerUnit = Object.freeze({
+  USD:120, GBP:160, EUR:140, CAD:90, AUD:80, BDT:1
+});
+
+export function exampleExchangeRate(fromCurrency, toCurrency) {
+  const from = exampleBdtPerUnit[fromCurrency];
+  const to = exampleBdtPerUnit[toCurrency];
+  if (!Number.isFinite(from) || !Number.isFinite(to) || to <= 0) return NaN;
+  return Math.round((from / to) * 1000000) / 1000000;
+}
+
+/** Convert between two currency units using a manually supplied pair rate.
+ * The UI always calculates costs in the entered currency first.
+ */
+export function convertCurrency(amount, targetUnitsPerSourceUnit) {
+  return amount * targetUnitsPerSourceUnit;
+}
+
+/** Checks entered amounts and ensures our user-entered exchange rate is positive. */
 export function validUniversityInputs(optionA, optionB, exchangeRate) {
   return validInputs(optionA) && validInputs(optionB) &&
     Number.isFinite(exchangeRate) && exchangeRate > 0;
