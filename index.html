@@ -41,43 +41,59 @@
         <div>
           <div class="eyebrow">03 / UNIVERSITY COST COMPARISON</div>
           <h2>Compare your future.</h2>
-          <p>Enter the costs for two universities. See estimated yearly totals side by side—and view them in US dollars or Bangladeshi taka.</p>
+          <p>Enter university costs in USD, GBP, EUR, CAD, AUD, or BDT, then compare yearly totals in any of these currencies.</p>
         </div>
         <span class="pill">New feature · Version 2</span>
       </div>
       <div class="currency-tools panel">
         <div class="currency-control">
-          <label for="displayCurrency">Show comparison totals in</label>
-          <select id="displayCurrency" aria-label="Currency used for displayed university costs">
-            <option value="USD" selected>USD — US dollars ($)</option>
+          <label for="inputCurrency">University costs entered in</label>
+          <select id="inputCurrency" aria-label="Currency of all entered university costs">
+            <option value="USD" selected>USD — US dollar ($)</option>
+            <option value="GBP">GBP — British pound (£)</option>
+            <option value="EUR">EUR — Euro (€)</option>
+            <option value="CAD">CAD — Canadian dollar (CA$)</option>
+            <option value="AUD">AUD — Australian dollar (A$)</option>
             <option value="BDT">BDT — Bangladeshi taka (৳)</option>
           </select>
         </div>
         <div class="currency-control">
-          <label for="bdtRate">Exchange rate: BDT for 1 USD</label>
-          <input id="bdtRate" type="number" min="0.01" max="10000" step="0.01" value="120" inputmode="decimal" />
+          <label for="displayCurrency">Show estimated totals in</label>
+          <select id="displayCurrency" aria-label="Currency used for displayed university costs">
+            <option value="USD" selected>USD — US dollar ($)</option>
+            <option value="GBP">GBP — British pound (£)</option>
+            <option value="EUR">EUR — Euro (€)</option>
+            <option value="CAD">CAD — Canadian dollar (CA$)</option>
+            <option value="AUD">AUD — Australian dollar (A$)</option>
+            <option value="BDT">BDT — Bangladeshi taka (৳)</option>
+          </select>
         </div>
-        <p class="currency-note">This is an editable <strong>example rate, not a live exchange rate</strong>. The inputs below always stay in USD; only the displayed results are converted. Check a reliable current rate before making decisions.</p>
+        <div class="currency-control">
+          <label for="exchangeRate">Exchange rate: 1 <span id="rateFromLabel">USD</span> = ? <span id="rateToLabel">USD</span></label>
+          <input id="exchangeRate" type="number" min="0.000001" step="any" value="1" inputmode="decimal" />
+        </div>
+        <p id="currencyRateHint" class="currency-note" aria-live="polite">No conversion needed when both currencies match.</p>
+        <p class="currency-note"><strong>Rates are examples, not live quotes.</strong> Enter a current rate from a reliable source before making decisions. All university tuition, aid, housing and living-cost entries must use <strong id="currencyCodeNote">USD</strong>. Changing their currency label does <strong>not</strong> automatically convert the numbers you typed. Both universities use the same input currency; only the estimated results are converted.</p>
       </div>
       <div class="university-grid">
         <div class="panel university-card">
           <div class="uni-tag">OPTION A</div>
           <label for="uniAName">University name</label><input id="uniAName" type="text" maxlength="60" value="University A" autocomplete="off" />
-          <label for="uniATuition">Annual tuition & fees <span>USD/year</span></label><input id="uniATuition" type="number" min="0" max="1000000" step="100" value="30000" inputmode="decimal" />
-          <label for="uniAAid">Annual scholarships / grants <span>USD/year</span></label><input id="uniAAid" type="number" min="0" max="1000000" step="100" value="10000" inputmode="decimal" />
-          <label for="uniAHousing">Housing <span>USD/month</span></label><input id="uniAHousing" type="number" min="0" max="1000000" step="50" value="1000" inputmode="decimal" />
-          <label for="uniALiving">Food, transport & other living costs <span>USD/month</span></label><input id="uniALiving" type="number" min="0" max="1000000" step="50" value="500" inputmode="decimal" />
+          <label for="uniATuition">Annual tuition & fees <span data-currency-unit="year">USD/year</span></label><input id="uniATuition" type="number" min="0" max="1000000" step="100" value="30000" inputmode="decimal" />
+          <label for="uniAAid">Annual scholarships / grants <span data-currency-unit="year">USD/year</span></label><input id="uniAAid" type="number" min="0" max="1000000" step="100" value="10000" inputmode="decimal" />
+          <label for="uniAHousing">Housing <span data-currency-unit="month">USD/month</span></label><input id="uniAHousing" type="number" min="0" max="1000000" step="50" value="1000" inputmode="decimal" />
+          <label for="uniALiving">Food, transport & other living costs <span data-currency-unit="month">USD/month</span></label><input id="uniALiving" type="number" min="0" max="1000000" step="50" value="500" inputmode="decimal" />
         </div>
         <div class="panel university-card">
           <div class="uni-tag">OPTION B</div>
           <label for="uniBName">University name</label><input id="uniBName" type="text" maxlength="60" value="University B" autocomplete="off" />
-          <label for="uniBTuition">Annual tuition & fees <span>USD/year</span></label><input id="uniBTuition" type="number" min="0" max="1000000" step="100" value="40000" inputmode="decimal" />
-          <label for="uniBAid">Annual scholarships / grants <span>USD/year</span></label><input id="uniBAid" type="number" min="0" max="1000000" step="100" value="25000" inputmode="decimal" />
-          <label for="uniBHousing">Housing <span>USD/month</span></label><input id="uniBHousing" type="number" min="0" max="1000000" step="50" value="1200" inputmode="decimal" />
-          <label for="uniBLiving">Food, transport & other living costs <span>USD/month</span></label><input id="uniBLiving" type="number" min="0" max="1000000" step="50" value="600" inputmode="decimal" />
+          <label for="uniBTuition">Annual tuition & fees <span data-currency-unit="year">USD/year</span></label><input id="uniBTuition" type="number" min="0" max="1000000" step="100" value="40000" inputmode="decimal" />
+          <label for="uniBAid">Annual scholarships / grants <span data-currency-unit="year">USD/year</span></label><input id="uniBAid" type="number" min="0" max="1000000" step="100" value="25000" inputmode="decimal" />
+          <label for="uniBHousing">Housing <span data-currency-unit="month">USD/month</span></label><input id="uniBHousing" type="number" min="0" max="1000000" step="50" value="1200" inputmode="decimal" />
+          <label for="uniBLiving">Food, transport & other living costs <span data-currency-unit="month">USD/month</span></label><input id="uniBLiving" type="number" min="0" max="1000000" step="50" value="600" inputmode="decimal" />
         </div>
       </div>
-      <div id="uniError" class="error" role="alert" hidden>Please enter valid, non-negative amounts for both universities and an exchange rate greater than zero.</div>
+      <div id="uniError" class="error" role="alert" hidden>Enter non-negative university costs and a valid exchange rate greater than zero.</div>
       <div class="university-results panel" id="universityResults" aria-live="polite">
         <div class="eyebrow">ESTIMATED ANNUAL OUT-OF-POCKET COST</div>
         <div class="university-totals">
@@ -111,7 +127,7 @@
           <label for="livingGrowth">Housing &amp; living-cost increase each year <span>% per year</span></label>
           <input id="livingGrowth" type="number" min="0" max="25" step="0.5" value="2" inputmode="decimal" />
         </div>
-        <p class="currency-note">Example growth assumptions—not predicted inflation or university price increases. Scholarships are held <strong>constant in USD each year</strong>; check their renewal conditions. Year 1 matches the university comparison above. Results use the same USD/BDT display choice and exchange rate.</p>
+        <p class="currency-note">Example growth assumptions—not predicted inflation or university price increases. Scholarships are held <strong>constant in the selected input currency each year</strong>; check their renewal conditions. Year 1 matches the comparison above. Results use the same selected output currency and editable exchange rate.</p>
         <button id="resetGrowth" type="button" class="text-button">↺ Reset growth assumptions</button>
       </div>
       <p id="projectionError" class="error" role="alert" hidden>Enter valid tuition and living-cost growth rates between 0% and 25%, and valid university inputs above.</p>
@@ -154,7 +170,7 @@
   <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; margin-top:25px;">
 
     <div style="background:#f4f9f5; padding:25px; border-radius:16px; border:1px solid #d9e9dc;">
-      <h3 style="font-size:30px; color:#245940;">21</h3>
+      <h3 style="font-size:30px; color:#245940;">27</h3>
       <p>Automated Tests</p>
     </div>
 
