@@ -16,7 +16,7 @@ FinFair is an early-stage, student-built affordability simulator to help prospec
 - One-time surprise cost scenario
 - Compare two different housing costs
 - Compare TWO universities using annual tuition & fees, annual scholarships/grants, monthly housing, and monthly living costs
-- Toggle comparison totals between USD and BDT using an editable (NOT live) exchange rate
+- Select input and output currencies (USD, GBP, EUR, CAD, AUD, BDT) with an editable, non-live exchange rate
 - View a side-by-side estimated annual cost, 12-month equivalent, and simple visual comparison
 - Four-year university cost predictor with editable annual tuition and living-cost increases
 - Year-by-year estimates, four-year totals, and shared USD/BDT toggle
@@ -93,7 +93,7 @@ Four-year total = sum(costs for years 1, 2, 3, and 4)
 - Growth percentages apply once each new year and are **illustrative assumptions, not official tuition projections**.
 - Scholarships/grants are assumed to stay the same dollar amount each year; actual aid renewal can vary.
 - All four years assume 12 months of living expenses. Financial aid eligibility, travel, insurance, loan interest, taxes, academic program changes, exchange fees, and future exchange rates are omitted.
-- The same user-entered USD/BDT conversion rate is applied to **displayed results only**.
+- The same user-entered selected-currency conversion rate is applied to **displayed results only**.
 - Rounding happens on display; internal calculations retain precision, so adding four displayed whole-dollar rows could differ slightly from the total.
 
 **Example at 3% annual tuition growth and 2% annual living-cost growth:**
@@ -167,3 +167,13 @@ This codebase, including the Version 2 and Version 3 comparison/projection featu
 ## Privacy
 
 Do not ask participants to enter real account numbers, passwords, or financial identifiers. Use estimates or fictional values during tests.
+
+## Multi-currency university planning (October 2026)
+
+Both the university comparison and the four-year forecast support six currencies: **USD, GBP, EUR, CAD, AUD, and BDT**. Choose **University costs entered in** to define the currency of *every university input* (including scholarships) and **Show estimated totals in** to choose the output currency. An editable pair-specific exchange rate converts the result. Example: enter GBP amounts, display BDT totals.
+
+- The editable example rate is shown as **1 source currency = X target currency**. Illustrative reference rates are not live quotes or verified current market rates; update the rate using a reliable source before using the results for decisions.
+- Switching the input currency **does not convert numbers already typed into the cost fields**. Replace them with real amounts expressed in your selected currency. Both universities must be entered in the same source currency.
+- All estimates and projections are calculated first in the input currency. Only the displayed totals, comparisons, and year-by-year results are converted. The model assumes one chosen rate for all four years, which is not a prediction of future FX rates.
+- When input and output currencies are the same, the rate is fixed at 1. Changes to pair-specific rates stay available until you reset the university example values or reload the page.
+- The separate monthly budget/housing simulator still uses USD and has not been changed.
