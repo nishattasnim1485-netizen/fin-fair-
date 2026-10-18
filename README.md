@@ -19,7 +19,7 @@ FinFair is an early-stage, student-built affordability simulator to help prospec
 - Select input and output currencies (USD, GBP, EUR, CAD, AUD, BDT) with an editable, non-live exchange rate
 - View a side-by-side estimated annual cost, 12-month equivalent, and simple visual comparison
 - Four-year university cost predictor with editable annual tuition and living-cost increases
-- Year-by-year estimates, four-year totals, and shared USD/BDT toggle
+- Year-by-year estimates, four-year totals, and shared six-currency controls
 - Transparent financial formulas with no external data or API
 - Projected annual balance calculator with transparent assumptions about monthly income and expenses
 
@@ -51,7 +51,7 @@ node --test calculations.test.mjs
 
 The new university comparison is in the `#universities` section of `index.html`. `styles.css` controls the design, `app.js` listens for changes and updates results, and `calculations.mjs` holds the tested math. No backend, paid API, or private student financial information is required.
 
-### University comparison formula (USD)
+### University comparison formula (in the currency entered; USD in the sample)
 
 ```
 annual estimated cost = max(0, annual tuition & fees + 12 × (monthly housing + monthly living costs) − annual aid)
@@ -59,20 +59,22 @@ annual estimated cost = max(0, annual tuition & fees + 12 × (monthly housing + 
 
 The simplified scholarship deduction could cover non-tuition costs in this prototype; actual aid may have restrictions. A negative net total is clamped to zero. The **monthly equivalent** is annual net cost / 12; this is **not** the university's billing schedule.
 
-### Currency toggle
+### Multi-currency display
+
+Choose an input currency (USD, GBP, EUR, CAD, AUD, or BDT) for **both** university cost entries, then choose the currency for displayed results. The cost formula uses the input currency; only the results are converted:
 
 ```
-converted BDT total = annual USD total × user-entered BDT per USD
+converted displayed total = cost in input currency × chosen output units per input unit
 ```
 
-The default **120 BDT per USD is an illustrative placeholder, not a current or live exchange rate**. Change it manually based on a reliable source. The input fields stay in USD even when totals are shown in BDT. Exchange fees and currency fluctuations are excluded.
+FinFair fills in an **illustrative, non-live rate** for the currency pair. The rate can be manually edited, and changing the source-currency selector never converts numbers already entered in the university input fields. For real comparisons, enter researched prices in the same currency as the input selector and verify an up-to-date exchange rate. Actual future exchange rates, fees, scholarship restrictions and other costs are not modeled.
 
 ### Sample check
 
 - University A: $30,000 tuition + 12 × ($1,000 housing + $500 living) − $10,000 scholarship = **$38,000/year**.
 - University B: $40,000 tuition + 12 × ($1,200 housing + $600 living) − $25,000 scholarship = **$36,600/year**.
 - University B is cheaper by **$1,400 per year** with these *fictional* inputs.
-- With illustrative rate of 120 BDT/USD: A = ৳4,560,000 and B = ৳4,392,000.
+- With the illustrative rate of 120 BDT per USD (select USD inputs and BDT output): A = ৳4,560,000 and B = ৳4,392,000.
 
 ## What changed in Version 3 — four-year cost scenarios
 
