@@ -1,4 +1,4 @@
-import { monthlyExpenses, monthlyBalance, afterUnexpectedCost, shareOfIncome, validInputs, compareHousing, universityAnnualCost, usdToBdt, validUniversityInputs, projectFourYears, totalProjection, validProjectionRates } from './calculations.mjs';
+import { monthlyExpenses, monthlyBalance, afterUnexpectedCost, shareOfIncome, validInputs, compareHousing, universityAnnualCost, convertCurrency, exampleExchangeRate, validUniversityInputs, projectFourYears, totalProjection, validProjectionRates } from './calculations.mjs';
 import { projectedAnnualBalance } from "./calculations.mjs";
 const $ = id => document.getElementById(id);
 const defaults = {income:2400, rent:900, other:650, tuition:3600, surprise:400, rentB:1200};
@@ -35,23 +35,47 @@ $('year').textContent = new Date().getFullYear();
 render();
 
 
-// ----- University cost comparison (Version 2) -----
-// These are example numbers, not prices from real universities.
+// ----- University cost comparison and manually entered multi-currency rates -----
+// All example numbers and currency rates are illustrative, not live.
 const universityDefaults = {
   uniAName:'University A', uniATuition:30000, uniAAid:10000, uniAHousing:1000, uniALiving:500,
   uniBName:'University B', uniBTuition:40000, uniBAid:25000, uniBHousing:1200, uniBLiving:600,
-  displayCurrency:'USD', bdtRate:120
+  inputCurrency:'USD', displayCurrency:'USD'
 };
 const numericUniversityFields = [
   'uniATuition','uniAAid','uniAHousing','uniALiving',
   'uniBTuition','uniBAid','uniBHousing','uniBLiving'
 ];
-// Initialized before the first university render (which also updates the projection).
 const growthDefaults = { tuitionGrowth:3, livingGrowth:2 };
 const growthFields = Object.keys(growthDefaults);
+const currencySymbols = {USD:'$', GBP:'£', EUR:'€', CAD:'CA$', AUD:'A$', BDT:'৳'};
+const savedPairRates = new Map();
+
+function pairKey() {
+  return `${$('inputCurrency').value}/${$('displayCurrency').value}`;
+}
+
+function syncCurrencyControls() {
+  const from = $('inputCurrency').value;
+  const to = $('displayCurrency').value;
+  const sameCurrency = from === to;
+  const customRate = savedPairRates.get(pairKey());
+  const rate = sameCurrency ? 1 : (customRate ?? exampleExchangeRate(from,to));
+  $('exchangeRate').value = String(rate);
+  $('exchangeRate').disabled = sameCurrency;
+  $('rateFromLabel').textContent = from;
+  $('rateToLabel').textContent = to;
+  $('currencyCodeNote').textContent = from;
+  document.querySelectorAll('[data-currency-unit]').forEach(el => {
+    el.textContent = `${from}/${el.dataset.currencyUnit}`;
+  });
+  $('currencyRateHint').textContent = sameCurrency
+    ? 'Both currencies match, so no conversion is needed.'
+    : `Illustrative rate for ${from} → ${to}. Change the number to a current, reliable rate; it is not updated automatically.`;
+  renderUniversities();
+}
 
 function readUniversity(prefix) {
-  // Input values are strings in HTML. Number(...) turns them into numeric values.
   return {
     tuition:Number($(prefix+'Tuition').value),
     aid:Number($(prefix+'Aid').value),
@@ -60,117 +84,116 @@ function readUniversity(prefix) {
   };
 }
 
+function formatUniversityAmount(amount) {
+  const rate = Number($('exchangeRate').value);
+  const code = $('displayCurrency').value;
+  const symbol = currencySymbols[code] || `${code} `;
+  return `${symbol}${Math.round(convertCurrency(amount,rate)).toLocaleString('en-US')}`;
+}
+
 function renderUniversities() {
   const a = readUniversity('uniA');
   const b = readUniversity('uniB');
-  const rate = Number($('bdtRate').value);
-  // Empty inputs would normally be converted by Number('') into 0; catch them.
-  const nonEmpty = numericUniversityFields.every(id => $(id).value.trim() !== '') && $('bdtRate').value.trim() !== '';
+  const rate = Number($('exchangeRate').value);
+  const nonEmpty = numericUniversityFields.every(id => $(id).value.trim() !== '') &&
+    $('exchangeRate').value.trim() !== '';
   const valid = nonEmpty && validUniversityInputs(a,b,rate);
   $('uniError').hidden = valid;
   $('universityResults').classList.toggle('invalid', !valid);
-  if (!valid) {
-    renderProjection();
-    return;
-  }
+  if (!valid) { renderProjection(); return; }
 
-  const aUsd = universityAnnualCost(a);
-  const bUsd = universityAnnualCost(b);
-  const showBdt = $('displayCurrency').value === 'BDT';
-  const format = usd => showBdt
-    ? `৳${Math.round(usdToBdt(usd,rate)).toLocaleString('en-US')}`
-    : `$${Math.round(usd).toLocaleString('en-US')}`;
-
+  const aCost = universityAnnualCost(a);
+  const bCost = universityAnnualCost(b);
   const aName = $('uniAName').value.trim() || 'University A';
   const bName = $('uniBName').value.trim() || 'University B';
   $('uniAResultName').textContent = aName;
   $('uniBResultName').textContent = bName;
   $('barAName').textContent = aName;
   $('barBName').textContent = bName;
-  $('uniATotal').textContent = format(aUsd);
-  $('uniBTotal').textContent = format(bUsd);
-  $('uniAMonth').textContent = format(aUsd / 12);
-  $('uniBMonth').textContent = format(bUsd / 12);
+  $('uniATotal').textContent = formatUniversityAmount(aCost);
+  $('uniBTotal').textContent = formatUniversityAmount(bCost);
+  $('uniAMonth').textContent = formatUniversityAmount(aCost / 12);
+  $('uniBMonth').textContent = formatUniversityAmount(bCost / 12);
 
-  const scale = Math.max(aUsd,bUsd,1); // prevents dividing by zero
-  $('uniBarA').style.width = `${aUsd/scale*100}%`;
-  $('uniBarB').style.width = `${bUsd/scale*100}%`;
-  const difference = Math.abs(aUsd-bUsd);
-  $('uniDifference').textContent = difference < 0.005
+  const scale = Math.max(aCost,bCost,1);
+  $('uniBarA').style.width = `${aCost/scale*100}%`;
+  $('uniBarB').style.width = `${bCost/scale*100}%`;
+  const difference = Math.abs(aCost-bCost);
+  $('uniDifference').textContent = difference < .005
     ? 'Both options have the same estimated annual cost based on your entries.'
-    : `${aUsd < bUsd ? aName : bName} has a lower estimated annual cost by ${format(difference)}.`;
-  renderProjection(); // Shared university inputs and currency selection feed Version 3.
+    : `${aCost < bCost ? aName : bName} has a lower estimated annual cost by ${formatUniversityAmount(difference)}.`;
+  renderProjection();
 }
 
-for (const id of [...numericUniversityFields,'uniAName','uniBName','bdtRate']) {
+for (const id of [...numericUniversityFields,'uniAName','uniBName']) {
   $(id).addEventListener('input',renderUniversities);
 }
-$('displayCurrency').addEventListener('change',renderUniversities);
-$('resetUniversities').addEventListener('click', () => {
-  for (const [id,value] of Object.entries(universityDefaults)) $(id).value = value;
+$('inputCurrency').addEventListener('change',syncCurrencyControls);
+$('displayCurrency').addEventListener('change',syncCurrencyControls);
+$('exchangeRate').addEventListener('input',() => {
+  const rate = Number($('exchangeRate').value);
+  if ($('inputCurrency').value !== $('displayCurrency').value &&
+      $('exchangeRate').value.trim() !== '' && Number.isFinite(rate) && rate > 0) {
+    savedPairRates.set(pairKey(),rate);
+  }
   renderUniversities();
 });
-renderUniversities();
+$('resetUniversities').addEventListener('click', () => {
+  savedPairRates.clear();
+  for (const [id,value] of Object.entries(universityDefaults)) $(id).value = value;
+  syncCurrencyControls();
+});
+syncCurrencyControls();
 
 
 // ----- Four-year cost predictor (Version 3) -----
-// Uses the same university costs and USD/BDT display setting as Version 2.
-
+// Uses the same selected input and output currencies as university comparison.
 function renderProjection() {
   const a = readUniversity('uniA');
   const b = readUniversity('uniB');
-  const rate = Number($('bdtRate').value);
+  const rate = Number($('exchangeRate').value);
   const tuitionGrowth = Number($('tuitionGrowth').value);
   const livingGrowth = Number($('livingGrowth').value);
-
-  // Reject blank inputs: Number('') would otherwise silently become 0.
-  const allRequired = [...numericUniversityFields, 'bdtRate', ...growthFields]
+  const allRequired = [...numericUniversityFields, 'exchangeRate', ...growthFields]
     .every(id => $(id).value.trim() !== '');
-  const valid = allRequired && validUniversityInputs(a, b, rate) &&
-    validProjectionRates(tuitionGrowth, livingGrowth);
+  const valid = allRequired && validUniversityInputs(a,b,rate) &&
+    validProjectionRates(tuitionGrowth,livingGrowth);
   $('projectionError').hidden = valid;
-  $('projectionResults').classList.toggle('invalid', !valid);
+  $('projectionResults').classList.toggle('invalid',!valid);
   if (!valid) return;
 
   const aRows = projectFourYears(a, tuitionGrowth, livingGrowth);
   const bRows = projectFourYears(b, tuitionGrowth, livingGrowth);
   const aTotal = totalProjection(aRows);
   const bTotal = totalProjection(bRows);
-  const showBdt = $('displayCurrency').value === 'BDT';
-  const format = usd => showBdt
-    ? `৳${Math.round(usdToBdt(usd,rate)).toLocaleString('en-US')}`
-    : `$${Math.round(usd).toLocaleString('en-US')}`;
   const aName = $('uniAName').value.trim() || 'University A';
   const bName = $('uniBName').value.trim() || 'University B';
-
   $('projectionAName').textContent = aName;
   $('projectionBName').textContent = bName;
   $('projectionTableA').textContent = aName;
   $('projectionTableB').textContent = bName;
-  $('projectionATotal').textContent = format(aTotal);
-  $('projectionBTotal').textContent = format(bTotal);
-  const difference = Math.abs(aTotal - bTotal);
+  $('projectionATotal').textContent = formatUniversityAmount(aTotal);
+  $('projectionBTotal').textContent = formatUniversityAmount(bTotal);
+  const difference = Math.abs(aTotal-bTotal);
   $('projectionDifference').textContent = difference < .005
     ? 'Both options have the same estimated cost over four years.'
-    : `${aTotal < bTotal ? aName : bName} has a lower estimated four-year cost by ${format(difference)}.`;
+    : `${aTotal < bTotal ? aName : bName} has a lower estimated four-year cost by ${formatUniversityAmount(difference)}.`;
 
-  // We create text nodes instead of inserting HTML so names are safely displayed.
   const tbody = $('projectionTableBody');
   tbody.replaceChildren();
-  for (let i = 0; i < 4; i++) {
+  for (let i=0; i<4; i++) {
     const row = document.createElement('tr');
-    for (const content of [`Year ${i + 1}`, format(aRows[i].cost), format(bRows[i].cost)]) {
+    for (const content of [`Year ${i+1}`,formatUniversityAmount(aRows[i].cost),formatUniversityAmount(bRows[i].cost)]) {
       const cell = document.createElement('td');
-      cell.textContent = content;
+      cell.textContent=content;
       row.appendChild(cell);
     }
     tbody.appendChild(row);
   }
 }
-
-for (const id of growthFields) $(id).addEventListener('input', renderProjection);
+for (const id of growthFields) $(id).addEventListener('input',renderProjection);
 $('resetGrowth').addEventListener('click', () => {
-  for (const [id,value] of Object.entries(growthDefaults)) $(id).value = value;
+  for (const [id,value] of Object.entries(growthDefaults)) $(id).value=value;
   renderProjection();
 });
 renderProjection();
